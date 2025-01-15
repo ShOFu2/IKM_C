@@ -1,8 +1,22 @@
-﻿#include <iostream>
+#include <iostream>
 #include <string>
 #include <vector>
 
 using namespace std;
+
+// Функция для удаления ведущих нулей из строки
+string removeLeadingZeros(const string& num) {
+    string result;
+    bool leadingZero = true; // Флаг для отслеживания ведущих нулей
+    for (char digit : num) {
+        if (leadingZero && digit == '0') {
+            continue; // Пропускаем ведущие нули
+        }
+        leadingZero = false; // Первый ненулевой символ
+        result += digit; // Добавляем символ к результату
+    }
+    return result.empty() ? "0" : result; // Если все символы были нулями, возвращаем "0"
+}
 
 // Функция для проверки, делится ли число на заданный делитель
 bool isDivisible(const string& num, int divisor) {
@@ -16,20 +30,16 @@ bool isDivisible(const string& num, int divisor) {
 
 // Функция для деления числа на заданный делитель
 pair<string, int> divide(const string& num, int divisor) {
-    string quotient; // Результат деления
+    string answer; // Результат деления
     int remainder = 0; // Остаток от деления
     for (char digit : num) {
         remainder = remainder * 10 + (digit - '0'); // Постепенно формируем остаток
-        quotient += (remainder / divisor) + '0'; // Добавляем цифру к результату
+        answer += (remainder / divisor) + '0'; // Добавляем цифру к результату
         remainder %= divisor; // Обновляем остаток
     }
     // Удаляем ведущие нули из результата
-    size_t startpos = quotient.find_first_not_of('0');
-    if (startpos != string::npos)
-        quotient = quotient.substr(startpos);
-    else
-        quotient = "0"; // Если результат равен 0
-    return { quotient, remainder }; // Возвращаем результат и остаток
+    answer = removeLeadingZeros(answer);
+    return { answer, remainder }; // Возвращаем результат и остаток
 }
 
 // Основная функция
@@ -41,11 +51,6 @@ int main() {
         cout << "Введите n-значное число (n > 20): ";
         cin >> num;
 
-        // Обработка отрицательных чисел
-        if (num[0] == '-') {
-            num = num.substr(1); // Убираем знак минуса
-        }
-
         // Проверка корректности ввода
         bool is_valid = true;
         for (char ch : num) {
@@ -54,6 +59,19 @@ int main() {
                 is_valid = false;
                 break;
             }
+        }
+
+        bool allZeros = true;
+        for (char ch : num) {
+            if (ch != '0') {
+                allZeros = false;
+                break;
+            }
+        }
+        if (allZeros) {
+            cout << "Ошибка: число не может состоять только из нулей.\n";
+            cout << "Пожалуйста, попробуйте снова.\n";
+            continue;
         }
 
         // Если ввод некорректен, повторяем запрос
