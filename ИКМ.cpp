@@ -47,13 +47,13 @@ int main() {
     setlocale(LC_ALL, "Russian");
 
     while (true) { // Основной цикл для повторного запроса
-        string num;
+        string n;
         cout << "Введите n-значное число (n > 20): ";
-        cin >> num;
+        cin >> n;
 
         // Проверка корректности ввода
         bool is_valid = true;
-        for (char ch : num) {
+        for (char ch : n) {
             if (!isdigit(ch)) {
                 cout << "Ошибка: введены недопустимые символы.\n";
                 is_valid = false;
@@ -62,7 +62,7 @@ int main() {
         }
 
         bool allZeros = true;
-        for (char ch : num) {
+        for (char ch : n) {
             if (ch != '0') {
                 allZeros = false;
                 break;
@@ -81,7 +81,7 @@ int main() {
         }
 
         // Факторизация числа
-        string n = num; // Копируем число для работы
+        // Копируем число для работы
         vector<pair<int, int>> factors; // Пары (делитель, степень)
 
         // Проверяем делимость на числа от 2 до 10 000
